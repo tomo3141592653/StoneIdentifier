@@ -1,26 +1,32 @@
-// import * as tf from '@tensorflow/tfjs';
-
 const imageUpload = document.getElementById('image-upload');
 const predictionElement = document.getElementById('prediction');
 
 async function loadModel() {
-    const model = await tf.loadLayersModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json');
+    const model = await tf.loadGraphModel('https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v3_small_100_224/classification/5/default/1', { fromTFHub: true });
     return model;
 }
 
 const modelPromise = loadModel();
 
+
 function preprocessImage(image) {
-    // 画像をモデルが受け付ける形式にリサイズ・正規化する
-    // この例では、MobileNetが受け付ける224x224サイズにリサイズ
     return tf.tidy(() => {
-        const resizedImage = tf.image.resizeBilinear(image, [224, 224]);
-        const normalizedImage = resizedImage.div(255.0);
-        const batchedImage = normalizedImage.expandDims(0);
-        return batchedImage;
+        const widthToHeight = image.shape[1] / image.shape[0];
+        let squareCrop;
+        if (widthToHeight > 1) {
+            const heightToWidth = image.shape[0] / image.shape[1];
+            const cropTop = (1 - heightToWidth) / 2;
+            const cropBottom = 1 - cropTop;
+            squareCrop = [[cropTop, 0, cropBottom, 1]];
+        } else {
+            const cropLeft = (1 - widthToHeight) / 2;
+            const cropRight = 1 - cropLeft;
+            squareCrop = [[0, cropLeft, 1, cropRight]];
+        }
+        const croppedImage = tf.image.cropAndResize(tf.expandDims(image), squareCrop, [0], [224, 224]);
+        return croppedImage.div(255);
     });
 }
-
 async function classifyImage(image) {
     const model = await modelPromise;
     const preprocessedImage = preprocessImage(image);

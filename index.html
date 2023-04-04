@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像分類ウェブアプリ</title>
+    <style>
+        body {
+            background-color: #F5F5F5;
+            font-family: sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input[type="file"] {
+            padding: 1em;
+            background-color: #FFFFFF;
+            color: #000000;
+            border-radius: 0.5em;
+            border: none;
+            box-shadow: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin-top: 2em;
+        }
+
+        input[type="file"]:hover {
+            box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+        }
+
+        #image-preview {
+            max-width: 500px;
+            margin: 2em auto;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>画像分類ウェブアプリ</h1>
+    <input type="file" id="image-upload" accept="image/*">
+    <div>
+        <img id="image-preview" src="" alt="選択した画像">
+    </div>
+    <p id="prediction"></p>
+
+    <!-- ここで、TensorFlow.js を読み込む -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0"></script>
+    <script src="app.js" crossorigin></script>
+</body>
+
+</html>

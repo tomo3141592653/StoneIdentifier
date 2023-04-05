@@ -2,7 +2,7 @@ const imageUpload = document.getElementById('image-upload');
 const predictionElement = document.getElementById('prediction');
 
 async function loadModel() {
-    const model = await tf.loadGraphModel('https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v3_small_100_224/classification/5/default/1', { fromTFHub: true });
+    const model = await tf.loadGraphModel('https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v3_large_100_224/classification/5/default/1', { fromTFHub: true });
     return model;
 }
 
